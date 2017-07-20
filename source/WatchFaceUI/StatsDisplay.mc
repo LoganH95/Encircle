@@ -1,13 +1,13 @@
-using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 using Toybox.Lang as Lang;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Application as App;
+using Toybox.ActivityMonitor;
 
 class StatsDisplay {
 
-	function drawDate(dc, x, y, font, justification) {
+	static function drawDate(dc, x, y, font, justification) {
 		var date = Calendar.info(Time.now(), Time.FORMAT_MEDIUM);
 		var dateFormat = App.getApp().getProperty("dateFormat");
 		var dateString; 
@@ -26,22 +26,17 @@ class StatsDisplay {
 		dc.drawText(x, y, font, dateString, justification);
 	}
 	
-	function drawBattery(dc, x, y, font, justification) {
-		var batteryString = Lang.format("$1$%", [Sys.getSystemStats().battery.toNumber()]);
-		dc.drawText(x, y, font, batteryString, justification);
-	}
-	
-	function drawSteps(dc, x, y, font, justification) {
+	static function drawSteps(dc, x, y, font, justification) {
 		var stepString = Lang.format("$1$", [ActivityMonitor.getInfo().steps]);
 		dc.drawText(x, y, font, stepString, justification);
 	}
 	
-	function drawGoal(dc, x, y, font, justification) {
+	static function drawGoal(dc, x, y, font, justification) {
 		var goalString = Lang.format("$1$", [ActivityMonitor.getInfo().stepGoal]);
 		dc.drawText(x, y, font, goalString, justification);
 	}
 	
-	function drawDistance(dc, x, y, font, justification) {
+	static function drawDistance(dc, x, y, font, justification) {
 		var distanceString; 
 		if (!Sys.getDeviceSettings().distanceUnits) {
 			var distance = ActivityMonitor.getInfo().distance.toDouble() / 100000.toFloat(); 
@@ -54,26 +49,7 @@ class StatsDisplay {
 		dc.drawText(x, y, font, distanceString, justification);
 	}
 	
-	function drawConnected(dc, x, y, font, justification) {
-		var connection; 
-		if (Sys.getDeviceSettings().phoneConnected) {
-			connection = "connected"; 
-		} else {
-			connection = "disconnected"; 
-		}
-		dc.drawText(x, y, font, connection, justification);
-	}
-	
-	function drawMessages(dc, x, y, font, justification) {
-		var message = "messages"; 
-		if (Sys.getDeviceSettings().notificationCount == 1) {
-			message = "message"; 
-		}
-		var messageString =  Lang.format("$1$ $2$", [Sys.getDeviceSettings().notificationCount, message]);
-		dc.drawText(x, y, font, messageString, justification);
-	}
-	
-	function drawCalories(dc, x, y, font, justification) {
+	static function drawCalories(dc, x, y, font, justification) {
 		var calorieString = Lang.format("$1$ C" , [ActivityMonitor.getInfo().calories]);
 		dc.drawText(x, y, font, calorieString, justification);
 	}
